@@ -1,4 +1,4 @@
-package co.edu.poli.ces3.universita.universita.Mode;
+package co.edu.poli.ces3.examen.examen.Mode;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -10,7 +10,7 @@ public abstract class Conexion {
     private String driver = "com.mysql.jdbc.Driver";
 
     // Nombre de la base de datos
-    private String database = "univercita";
+    private String database = "examences";
 
     // Host
     private String hostname = "localhost";
@@ -22,7 +22,7 @@ public abstract class Conexion {
     private String url = "jdbc:mysql://" + hostname + ":" + port + "/" + database + "?useSSL=false";
 
     // Nombre de usuario
-    private String username = "us_CES3";
+    private String username = "edwinCes";
 
     // Clave de usuario
     private String password = "admin123";

@@ -1,4 +1,4 @@
-package co.edu.poli.ces3.universita.universita;
+package co.edu.poli.ces3.examen.examen;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

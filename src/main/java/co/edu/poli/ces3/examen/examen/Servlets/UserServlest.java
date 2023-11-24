@@ -1,7 +1,7 @@
-package co.edu.poli.ces3.universita.universita.Servlets;
+package co.edu.poli.ces3.examen.examen.Servlets;
 
-import co.edu.poli.ces3.universita.universita.Controller.CtrStudents;
-import co.edu.poli.ces3.universita.universita.dto.DtoStudents;
+import co.edu.poli.ces3.examen.examen.Controller.CtrUser;
+import co.edu.poli.ces3.examen.examen.dto.DtoUser;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -16,56 +16,58 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet(name = "studentServlet", value = "/student")
-public class StudentServlest extends MyServlet {
+@WebServlet(name = "userServlet", value = "/user")
+public class UserServlest extends MyServlet {
     private String message;
-
     private GsonBuilder gsonBuilder;
     private Gson gson;
-    private ArrayList<DtoStudents> student = new ArrayList<>();
+    private ArrayList<DtoUser> user = new ArrayList<>();
 
     public void init() {
 
         gsonBuilder = new GsonBuilder();
         gson = gsonBuilder.create();
 
-        DtoStudents student1 = new DtoStudents();
-        student1.setId(12);
-        student1.setNombre("Edwin");
-        student1.setDocumento("1234567");
+        DtoUser user1 = new DtoUser();
+        user1.id = 5;
+        user1.setName("Edwin");
+        user1.setMail("edwin@mail");
+        user1.setPass("98765");
 
-        DtoStudents student2 = new DtoStudents();
-        student2.setId(15);
-        student2.setNombre("Nicolas");
-        student2.setDocumento("9876543");
+        DtoUser user2 = new DtoUser();
+        user1.id = 11;
+        user1.setName("Kaiser");
+        user1.setMail("kaiser@mail");
+        user1.setPass("12345");
 
-        student.add(student1);
-        student.add(student2);
+        user.add(user1);
+        user.add(user2);
 
-        for (int i=0; i<student.size(); i++){
+        for (int i=0; i<user.size(); i++){
 
-            System.out.println(student.get(i));
+            System.out.println(user.get(i));
         }
 
         message = "student";
     }
 
 
-    public StudentServlest(){
+    public UserServlest(){
     }
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("application/json");
         PrintWriter out = response.getWriter();
+        CtrUser ctr = new CtrUser();
 
-        String id = request.getParameter("studentId");
-        CtrStudents ctr = new CtrStudents();
-        if (id == null){
-            out.println(gson.toJson(ctr.allStudents()));
-        }else {
-            DtoStudents studentsId = ctr.findById(Integer.parseInt(id));
-            out.println(gson.toJson(studentsId));
+        String id = request.getParameter("id");
+        if (id != null && !id.isEmpty()) {
+            int userId = Integer.parseInt(id);
+            DtoUser user = ctr.getUserById(userId);
+            out.print(gson.toJson(user));
+        } else {
+            ArrayList<DtoUser> users = ctr.getAllUsers();
+            out.print(gson.toJson(users));
         }
-        // Hello
 
     }
 
@@ -75,49 +77,55 @@ public class StudentServlest extends MyServlet {
         resp.setContentType("application/json");
 
         JsonObject body = this.getParamsFromPost(req);
-        CtrStudents ctr = new CtrStudents();
-        DtoStudents students = new DtoStudents (
-                body.get("documento").getAsString(),
-                body.get("nombre").getAsString()
+        CtrUser ctr = new CtrUser();
+        DtoUser std = new DtoUser(
+                body.get("mail").getAsString(),
+                body.get("name").getAsString(),
+                body.get("pass").getAsString()
         );
 
-        DtoStudents newStudent = ctr.addStudents(students);
+        DtoUser newUser = ctr.addUser(std);
+        if (newUser != null){
+            out.print(gson.toJson(newUser));
+        }else {
+            out.print("El usuario ya existe");
+        }
 
-        out.print(gson.toJson(newStudent));
         out.flush();
     }
 
-    @Override
+    /*@Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ServletOutputStream out = resp.getOutputStream();
         resp.setContentType("application/json");
         JsonObject body = this.getParamsFromPost(req);
-        CtrStudents ctr = new CtrStudents();
+        CtrUser ctr = new CtrUser();
 
         if (body != null){
-            DtoStudents students = new DtoStudents (
+            DtoUser students = new DtoUser(
                     body.get("id").getAsInt(),
                     body.get("documento").getAsString(),
                     body.get("nombre").getAsString()
             );
-            DtoStudents updateStudent = ctr.updateStudents(students);
+            DtoUser updateStudent = ctr.updateStudents(students);
             out.println(gson.toJson(updateStudent));
         }else {
             out.println(gson.toJson(student));
         }
 
-    }
+    }*/
 
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ServletOutputStream out = resp.getOutputStream();
         resp.setContentType("application/json");
         JsonObject body = this.getParamsFromPost(req);
-        CtrStudents ctr = new CtrStudents();
+        CtrUser ctr = new CtrUser();
 
         if (body != null){
-            int deleteStudent = ctr.deleteStudents(body.get("id").getAsInt());
-            out.println(gson.toJson(deleteStudent));
+            int delete = ctr.deleteUser(body.get("id").getAsInt());
+            out.println(gson.toJson(delete));
+            out.print(gson.toJson("Eliminado"));
         }
     }
 

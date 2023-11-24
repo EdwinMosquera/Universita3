@@ -1,4 +1,4 @@
-package co.edu.poli.ces3.universita.universita.Servlets;
+package co.edu.poli.ces3.examen.examen.Servlets;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
